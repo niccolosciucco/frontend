@@ -1,9 +1,9 @@
 import { useState, type FormEvent } from "react";
-import { Container, Card, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import { axiosClient } from "../api/axiosClient";
 import { createMockToken } from "../auth/mockAuth";
+import "./LoginPage.css";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -25,7 +25,7 @@ export default function LoginPage() {
       login(data.token);
       navigate("/dashboard");
     } catch {
-      setError("Credenziali non valide");
+      setError("Credenziali non valide. Controlla email e password.");
     } finally {
       setLoading(false);
     }
@@ -41,59 +41,120 @@ export default function LoginPage() {
   };
 
   return (
-    <Container
-      className="d-flex align-items-center justify-content-center"
-      style={{ minHeight: "100vh" }}
-    >
-      <Card style={{ width: 380 }} className="p-2">
-        <Card.Body>
-          <Card.Title className="mb-3 text-center">PitWall Pro</Card.Title>
-          {error && <Alert variant="danger">{error}</Alert>}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <Button type="submit" className="w-100" disabled={loading}>
-              {loading ? "Accesso in corso…" : "Accedi"}
-            </Button>
-          </Form>
-          <hr className="my-3" />
-          <p className="text-center text-muted small mb-2">
-            Modalità sviluppo, nessun backend richiesto
-          </p>
-          <div className="d-flex gap-2">
-            <Button
-              variant="outline-secondary"
-              className="w-100"
-              onClick={() => handleMockLogin("USER")}
-            >
-              Entra come viewer
-            </Button>
-            <Button
-              variant="outline-danger"
-              className="w-100"
-              onClick={() => handleMockLogin("ADMIN")}
-            >
-              Entra come admin
-            </Button>
+    <div className="pw-login-page">
+      <div className="pw-status-bar">
+        <span className="pw-status-dot" aria-hidden="true" />
+        SESSIONE: LIBERE 2 · PISTA ASCIUTTA · MONZA
+      </div>
+
+      <div className="pw-login-body">
+        <div className="pw-telemetry-panel">
+          <svg
+            className="pw-track-outline"
+            viewBox="0 0 400 300"
+            aria-hidden="true"
+          >
+            <path
+              d="M40,220 C40,120 120,60 200,60 C280,60 300,140 260,180 C220,220 160,200 160,150 C160,100 220,90 260,110 C320,140 340,200 300,240 C260,280 120,280 60,240 C20,215 40,220 40,220 Z"
+              fill="none"
+              stroke="#ecebe4"
+              strokeWidth="2"
+            />
+          </svg>
+
+          <div className="pw-telemetry-eyebrow">TELEMETRIA LIVE</div>
+          <div className="pw-telemetry-track">Autodromo Nazionale Monza</div>
+
+          <div className="pw-sector-row">
+            <span className="pw-sector-label">Settore 1</span>
+            <span className="pw-sector-time purple">0:24.881</span>
           </div>
-        </Card.Body>
-      </Card>
-    </Container>
+          <div className="pw-sector-row">
+            <span className="pw-sector-label">Settore 2</span>
+            <span className="pw-sector-time green">0:31.204</span>
+          </div>
+          <div className="pw-sector-row">
+            <span className="pw-sector-label">Settore 3</span>
+            <span className="pw-sector-time yellow">0:19.902</span>
+          </div>
+
+          <div className="pw-lap-counter">
+            <div className="pw-lap-counter-value">34/58</div>
+            <div className="pw-lap-counter-label">GIRO CORRENTE</div>
+          </div>
+        </div>
+
+        <div className="pw-login-panel">
+          <div className="pw-login-card">
+            <div className="pw-sector-strip" aria-hidden="true">
+              <span className="pw-sector" />
+              <span className="pw-sector" />
+              <span className="pw-sector" />
+            </div>
+
+            <div className="pw-wordmark">PitWall Pro</div>
+            <div className="pw-tagline">ACCESSO MURETTO BOX</div>
+
+            {error && (
+              <div className="pw-error" role="alert">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="pw-field">
+                <label className="pw-field-label" htmlFor="pw-email">
+                  EMAIL
+                </label>
+                <input
+                  id="pw-email"
+                  type="email"
+                  className="pw-field-input"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                  required
+                />
+              </div>
+
+              <div className="pw-field">
+                <label className="pw-field-label" htmlFor="pw-password">
+                  CHIAVE DI ACCESSO
+                </label>
+                <input
+                  id="pw-password"
+                  type="password"
+                  className="pw-field-input"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  required
+                />
+              </div>
+
+              <button type="submit" className="pw-submit" disabled={loading}>
+                {loading ? "Accesso in corso…" : "Accedi al muretto"}
+              </button>
+            </form>
+
+            <div className="pw-dev-divider">MODALITÀ SVILUPPO</div>
+            <div className="pw-dev-buttons">
+              <button
+                className="pw-dev-btn viewer"
+                onClick={() => handleMockLogin("USER")}
+              >
+                Entra come viewer
+              </button>
+              <button
+                className="pw-dev-btn admin"
+                onClick={() => handleMockLogin("ADMIN")}
+              >
+                Entra come admin
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
