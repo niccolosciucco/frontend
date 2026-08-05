@@ -8,8 +8,8 @@ import {
   ResponsiveContainer,
   type TooltipProps,
 } from "recharts";
-import { useLiveRaceData } from "../hooks/useLiveRaceData";
 import { formatLapTime, formatGap } from "../utils/format";
+import { useRaceData } from "../context/useRaceData";
 
 const TOP_CHART_DRIVERS = ["VER", "NOR"];
 const CHART_COLORS: Record<string, string> = {
@@ -36,7 +36,7 @@ function ChartTooltip({
 }
 
 export default function DashboardPage() {
-  const race = useLiveRaceData(3000);
+  const race = useRaceData();
 
   return (
     <div>
