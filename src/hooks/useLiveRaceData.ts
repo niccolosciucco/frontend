@@ -144,17 +144,22 @@ function tick(state: RaceState): RaceState {
     -HISTORY_LENGTH,
   );
 
-  const fastest = nextDrivers.reduce((best, driver) =>
+  const bestThisTick = nextDrivers.reduce((best, driver) =>
     driver.lastLapSeconds < best.lastLapSeconds ? driver : best,
   );
+
+  const isNewRecord =
+    resetLap || bestThisTick.lastLapSeconds < state.fastestLapTime;
 
   return {
     ...state,
     currentLap: nextLap,
     drivers: nextDrivers,
     lapTimeHistory,
-    fastestLapTime: fastest.lastLapSeconds,
-    fastestLapDriver: fastest.name,
+    fastestLapTime: isNewRecord
+      ? bestThisTick.lastLapSeconds
+      : state.fastestLapTime,
+    fastestLapDriver: isNewRecord ? bestThisTick.name : state.fastestLapDriver,
     topSpeed: clamp(state.topSpeed + randomDelta(4), 320, 350),
   };
 }
