@@ -12,6 +12,7 @@ import DriversAdminPage from "./pages/admin/DriversAdminPage";
 import TeamsAdminPage from "./pages/admin/TeamsAdminPage";
 import CircuitsAdminPage from "./pages/admin/CircuitsAdminPage";
 import EventsAdminPage from "./pages/admin/EventsAdminPage";
+import { RaceDataProvider } from "./context/RaceDataContext";
 
 function App() {
   return (
@@ -20,13 +21,19 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route element={<AppLayout />}>
+          <Route
+            element={
+              <RaceDataProvider>
+                <AppLayout />
+              </RaceDataProvider>
+            }
+          >
+            {" "}
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/strategia" element={<StrategyPage />} />
             <Route path="/storico" element={<HistoryPage />} />
             <Route path="/circuiti" element={<CircuitsPage />} />
-
             <Route element={<ProtectedRoute requiredRole="ADMIN" />}>
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<Navigate to="piloti" replace />} />
