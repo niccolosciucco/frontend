@@ -7,3 +7,178 @@
 body {
   background-color: #f5f5f3;
 }
+
+:root {
+  --pw-bg: #15171c;
+  --pw-panel: #1c1f26;
+  --pw-panel-2: #20242c;
+  --pw-border: rgba(255, 255, 255, 0.08);
+  --pw-text: #ecebe4;
+  --pw-text-dim: #8a8d95;
+  --pw-purple: #9b5de5;
+  --pw-green: #2ed9a0;
+  --pw-yellow: #f2c94c;
+  --pw-red: #e24b4a;
+
+  --bs-body-bg: var(--pw-bg);
+  --bs-body-color: var(--pw-text);
+  --bs-border-color: var(--pw-border);
+  --bs-primary: var(--pw-purple);
+  --bs-primary-rgb: 155, 93, 229;
+  --bs-tertiary-bg: var(--pw-panel);
+  --bs-secondary-color: var(--pw-text-dim);
+}
+
+body {
+  background-color: var(--pw-bg);
+  font-family: "Titillium Web", sans-serif;
+}
+
+.pw-mono {
+  font-family: "JetBrains Mono", monospace;
+}
+
+.navbar-nav .nav-link {
+  transition: color 0.15s ease;
+}
+.navbar-nav .nav-link.active {
+  color: var(--pw-purple) !important;
+  font-weight: 600;
+}
+
+.pw-card {
+  background: var(--pw-panel);
+  border: 1px solid var(--pw-border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.pw-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.pw-metric-label {
+  font-size: 12px;
+  color: var(--pw-text-dim);
+  margin-bottom: 4px;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.04em;
+}
+
+.pw-metric-value {
+  font-size: 22px;
+  font-weight: 600;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.pw-metric-sub {
+  font-size: 12px;
+  color: var(--pw-text-dim);
+}
+
+.pw-badge {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.04em;
+}
+
+.pw-badge-green {
+  background: rgba(46, 217, 160, 0.15);
+  color: var(--pw-green);
+}
+.pw-badge-purple {
+  background: rgba(155, 93, 229, 0.15);
+  color: var(--pw-purple);
+}
+
+.pw-standings-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--pw-border);
+}
+.pw-standings-row:last-child {
+  border-bottom: none;
+}
+
+.pw-position {
+  width: 20px;
+  font-weight: 600;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.pw-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--pw-panel-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.pw-driver-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+.pw-driver-team {
+  font-size: 12px;
+  color: var(--pw-text-dim);
+}
+
+.pw-tire-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.pw-tire-dot.soft {
+  background: var(--pw-red);
+}
+.pw-tire-dot.medium {
+  background: var(--pw-yellow);
+}
+.pw-tire-dot.hard {
+  background: var(--pw-text-dim);
+}
+
+.pw-gap,
+.pw-laptime {
+  font-size: 13px;
+  font-family: "JetBrains Mono", monospace;
+  width: 72px;
+  text-align: right;
+}
+.pw-gap {
+  color: var(--pw-text-dim);
+}
+
+.pw-progress-track {
+  height: 6px;
+  background: var(--pw-panel-2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.pw-progress-fill {
+  height: 100%;
+  transition: width 0.6s ease;
+}
+
+.pw-chart-tooltip {
+  background: var(--pw-panel-2);
+  border: 1px solid var(--pw-border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--pw-text);
+}
