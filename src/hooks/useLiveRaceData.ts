@@ -99,12 +99,11 @@ function buildInitialHistory(
 }
 
 function tick(state: RaceState): RaceState {
-  let nextLap = state.currentLap + 1;
-  let resetLap = false;
-  if (nextLap > state.totalLaps) {
-    nextLap = 1;
-    resetLap = true;
+  if (state.currentLap >= state.totalLaps) {
+    return { ...state, isFinished: true };
   }
+
+  const nextLap = state.currentLap + 1;
 
   const nextDrivers = state.drivers
     .map((driver) => {
@@ -117,12 +116,16 @@ function tick(state: RaceState): RaceState {
         driver.position === 1
           ? 0
           : clamp(driver.gapSeconds + randomDelta(0.4), 0.2, 40);
-      const tireWearPercent = resetLap
-        ? Math.round(10 + Math.random() * 10)
-        : clamp(driver.tireWearPercent + Math.random() * 2.5, 0, 100);
-      const fuelPercent = resetLap
-        ? 100
-        : clamp(driver.fuelPercent - Math.random() * 1.5, 0, 100);
+      const tireWearPercent = clamp(
+        driver.tireWearPercent + Math.random() * 2.5,
+        0,
+        100,
+      );
+      const fuelPercent = clamp(
+        driver.fuelPercent - Math.random() * 1.5,
+        0,
+        100,
+      );
       const ersPercent = clamp(driver.ersPercent + randomDelta(12), 20, 95);
       return {
         ...driver,
@@ -147,9 +150,7 @@ function tick(state: RaceState): RaceState {
   const bestThisTick = nextDrivers.reduce((best, driver) =>
     driver.lastLapSeconds < best.lastLapSeconds ? driver : best,
   );
-
-  const isNewRecord =
-    resetLap || bestThisTick.lastLapSeconds < state.fastestLapTime;
+  const isNewRecord = bestThisTick.lastLapSeconds < state.fastestLapTime;
 
   return {
     ...state,
@@ -161,6 +162,7 @@ function tick(state: RaceState): RaceState {
       : state.fastestLapTime,
     fastestLapDriver: isNewRecord ? bestThisTick.name : state.fastestLapDriver,
     topSpeed: clamp(state.topSpeed + randomDelta(4), 320, 350),
+    isFinished: nextLap >= state.totalLaps,
   };
 }
 
@@ -177,6 +179,7 @@ export function useLiveRaceData(intervalMs = 3000) {
       fastestLapTime: Math.min(...drivers.map((d) => d.lastLapSeconds)),
       fastestLapDriver: drivers[0].name,
       topSpeed: 341,
+      isFinished: false,
     };
   });
 
@@ -184,7 +187,13 @@ export function useLiveRaceData(intervalMs = 3000) {
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
-      setState((prev) => tick(prev));
+      setState((prev) => {
+        if (prev.isFinished) {
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          return prev;
+        }
+        return tick(prev);
+      });
     }, intervalMs);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
