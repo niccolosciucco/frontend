@@ -48,8 +48,22 @@ export default function DashboardPage() {
           </div>
         </div>
         <div className="d-flex gap-2">
-          <span className="pw-badge pw-badge-green">Bandiera verde</span>
-          <span className="pw-badge pw-badge-purple">Drs attivo</span>
+          {race.isFinished ? (
+            <span
+              className="pw-badge"
+              style={{
+                background: "rgba(236,235,228,0.12)",
+                color: "var(--pw-text)",
+              }}
+            >
+              Bandiera a scacchi
+            </span>
+          ) : (
+            <>
+              <span className="pw-badge pw-badge-green">Bandiera verde</span>
+              <span className="pw-badge pw-badge-purple">Drs attivo</span>
+            </>
+          )}
         </div>
       </div>
 
