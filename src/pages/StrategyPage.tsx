@@ -40,6 +40,7 @@ export default function StrategyPage() {
 
   const selectedDriver =
     race.drivers.find((d) => d.id === selectedDriverId) ?? race.drivers[0];
+  const controlsDisabled = race.isFinished;
 
   const handleSimulate = () => {
     setResult(simulateStrategy(selectedDriver, pitLap, compound));
@@ -48,15 +49,33 @@ export default function StrategyPage() {
   return (
     <div>
       <div className="mb-4">
-        <div className="fs-4 fw-semibold">Pannello strategia</div>
+        <div className="d-flex align-items-center gap-2 flex-wrap">
+          <div className="fs-4 fw-semibold">Pannello strategia</div>
+          {race.isFinished && (
+            <span
+              className="pw-badge"
+              style={{
+                background: "rgba(236,235,228,0.12)",
+                color: "var(--pw-text)",
+              }}
+            >
+              Gara terminata
+            </span>
+          )}
+        </div>
         <div className="pw-mono text-body-secondary" style={{ fontSize: 13 }}>
-          Simula un pit stop e confronta l'effetto sul gap dal leader
+          {race.isFinished
+            ? "La sessione è conclusa: le strategie non sono più modificabili."
+            : "Simula un pit stop e confronta l'effetto sul gap dal leader"}
         </div>
       </div>
 
       <div className="row g-3">
         <div className="col-lg-5">
-          <div className="pw-card h-100">
+          <div
+            className="pw-card h-100"
+            style={{ opacity: controlsDisabled ? 0.6 : 1 }}
+          >
             <div className="pw-card-title">Parametri simulazione</div>
 
             <label className="pw-metric-label" htmlFor="strategy-driver">
@@ -67,6 +86,7 @@ export default function StrategyPage() {
               className="form-select mb-3"
               value={selectedDriverId}
               onChange={(e) => setSelectedDriverId(e.target.value)}
+              disabled={controlsDisabled}
             >
               {race.drivers.map((driver) => (
                 <option key={driver.id} value={driver.id}>
@@ -91,6 +111,7 @@ export default function StrategyPage() {
               max={race.totalLaps}
               value={pitLap}
               onChange={(e) => setPitLap(Number(e.target.value))}
+              disabled={controlsDisabled}
             />
 
             <label className="pw-metric-label">Mescola al pit stop</label>
@@ -101,19 +122,29 @@ export default function StrategyPage() {
                   type="button"
                   className={`btn flex-fill ${compound === key ? "btn-primary" : "btn-outline-secondary"}`}
                   onClick={() => setCompound(key)}
+                  disabled={controlsDisabled}
                 >
                   {COMPOUND_LABELS[key]}
                 </button>
               ))}
             </div>
 
-            <button
-              type="button"
-              className="btn btn-primary w-100"
-              onClick={handleSimulate}
-            >
-              Simula strategia
-            </button>
+            {controlsDisabled ? (
+              <div
+                className="text-center pw-mono text-body-secondary"
+                style={{ fontSize: 12, padding: "10px 0" }}
+              >
+                Strategie disabilitate a gara conclusa
+              </div>
+            ) : (
+              <button
+                type="button"
+                className="btn btn-primary w-100"
+                onClick={handleSimulate}
+              >
+                Simula strategia
+              </button>
+            )}
           </div>
         </div>
 
@@ -208,8 +239,9 @@ export default function StrategyPage() {
                 className="text-body-secondary text-center"
                 style={{ fontSize: 13, padding: "40px 0" }}
               >
-                Imposta i parametri e premi "Simula strategia" per vedere il
-                confronto.
+                {race.isFinished
+                  ? "Nessuna strategia simulata: la gara si è conclusa."
+                  : 'Imposta i parametri e premi "Simula strategia" per vedere il confronto.'}
               </div>
             )}
           </div>
