@@ -28,4 +28,5 @@ export interface RaceState {
   fastestLapTime: number;
   fastestLapDriver: string;
   topSpeed: number;
+  isFinished: boolean;
 }
