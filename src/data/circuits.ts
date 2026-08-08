@@ -106,4 +106,19 @@ export const CIRCUITS: CircuitInfo[] = [
     description:
       "Pista nel deserto che apre tradizionalmente la stagione, superficie molto abrasiva che stressa parecchio le gomme.",
   },
+  {
+    id: "spa",
+    name: "Circuit de Spa-Francorchamps",
+    location: "Stavelot",
+    country: "Belgio",
+    lengthKm: 7.004,
+    laps: 44,
+    lapRecordTime: "1:46.286",
+    lapRecordDriver: "Valtteri Bottas",
+    lapRecordYear: 2018,
+    turns: 19,
+    drsZones: 2,
+    description:
+      "Tracciato storico nelle Ardenne con il famoso passaggio Eau Rouge-Raidillon, noto per le variazioni altimetriche e il meteo imprevedibile.",
+  },
 ];
