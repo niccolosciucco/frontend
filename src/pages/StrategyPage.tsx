@@ -33,6 +33,7 @@ export default function StrategyPage() {
   const [result, setResult] = useState<StrategyResult | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPitLap((prev) =>
       Math.min(Math.max(prev, race.currentLap), race.totalLaps),
     );
