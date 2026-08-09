@@ -13,6 +13,7 @@ import TeamsAdminPage from "./pages/admin/TeamsAdminPage";
 import CircuitsAdminPage from "./pages/admin/CircuitsAdminPage";
 import EventsAdminPage from "./pages/admin/EventsAdminPage";
 import { RaceDataProvider } from "./context/RaceDataContext";
+import { AdminDataProvider } from "./context/AdminDataContext";
 
 function App() {
   return (
@@ -35,7 +36,14 @@ function App() {
             <Route path="/storico" element={<HistoryPage />} />
             <Route path="/circuiti" element={<CircuitsPage />} />
             <Route element={<ProtectedRoute requiredRole="ADMIN" />}>
-              <Route path="/admin" element={<AdminLayout />}>
+              <Route
+                path="/admin"
+                element={
+                  <AdminDataProvider>
+                    <AdminLayout />
+                  </AdminDataProvider>
+                }
+              >
                 <Route index element={<Navigate to="piloti" replace />} />
                 <Route path="piloti" element={<DriversAdminPage />} />
                 <Route path="team" element={<TeamsAdminPage />} />
