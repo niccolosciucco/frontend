@@ -1,3 +1,84 @@
+import { useAdminData } from "../../context/useAdminData";
+import {
+  AdminCrudPage,
+  type AdminColumn,
+  type AdminFormField,
+} from "../../components/admin/AdminCrudPage";
+import type { AdminDriver } from "../../types/admin";
+
 export default function DriversAdminPage() {
-  return <h2>Gestione piloti — in costruzione</h2>;
+  const { drivers, setDrivers, teams } = useAdminData();
+  const teamName = (teamId: string) =>
+    teams.find((t) => t.id === teamId)?.name ?? "—";
+
+  const columns: AdminColumn<AdminDriver>[] = [
+    {
+      key: "name",
+      label: "Nome",
+      render: (d) => (
+        <div className="d-flex align-items-center gap-2">
+          <div className="pw-avatar">{d.number}</div>
+          <div>
+            <div className="pw-driver-name">{d.name}</div>
+            <div className="pw-driver-team">{teamName(d.teamId)}</div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: "nationality",
+      label: "Nazione",
+      width: "70px",
+      render: (d) => (
+        <span className="pw-mono" style={{ fontSize: 13 }}>
+          {d.nationality}
+        </span>
+      ),
+    },
+  ];
+
+  const fields: AdminFormField<AdminDriver>[] = [
+    { name: "name", label: "Nome completo", type: "text", required: true },
+    {
+      name: "teamId",
+      label: "Team",
+      type: "select",
+      required: true,
+      options: teams.map((t) => ({ value: t.id, label: t.name })),
+    },
+    {
+      name: "nationality",
+      label: "Nazionalità (codice a 3 lettere)",
+      type: "text",
+      required: true,
+    },
+    { name: "number", label: "Numero di gara", type: "number", required: true },
+  ];
+
+  return (
+    <AdminCrudPage<AdminDriver>
+      title="Piloti"
+      newItemLabel="Nuovo pilota"
+      searchPlaceholder="Cerca pilota per nome"
+      columns={columns}
+      fields={fields}
+      items={drivers}
+      onCreate={(item) =>
+        setDrivers((prev) => [...prev, { ...item, id: crypto.randomUUID() }])
+      }
+      onUpdate={(item) =>
+        setDrivers((prev) => prev.map((d) => (d.id === item.id ? item : d)))
+      }
+      onDelete={(id) => setDrivers((prev) => prev.filter((d) => d.id !== id))}
+      emptyItem={() => ({
+        id: "",
+        name: "",
+        teamId: teams[0]?.id ?? "",
+        nationality: "",
+        number: "",
+      })}
+      searchPredicate={(item, query) => item.name.toLowerCase().includes(query)}
+      itemLabel={(item) => item.name}
+    />
+  );
 }
