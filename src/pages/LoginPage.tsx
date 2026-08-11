@@ -79,7 +79,7 @@ export default function LoginPage() {
           </div>
 
           <div className="pw-lap-counter">
-            <div className="pw-lap-counter-value">34/58</div>
+            <div className="pw-lap-counter-value">1/58</div>
             <div className="pw-lap-counter-label">GIRO CORRENTE</div>
           </div>
         </div>

@@ -15,42 +15,48 @@ export default function CircuitsPage() {
         </div>
       </div>
 
-      <div className="row g-3 mb-4">
-        {CIRCUITS.map((circuit) => {
-          const isSelected = circuit.id === selectedCircuit.id;
-          return (
-            <div className="col-6 col-md-4 col-lg-3" key={circuit.id}>
-              <button
-                type="button"
-                onClick={() => setSelectedCircuitId(circuit.id)}
-                className="btn w-100 text-start p-3 h-100"
-                style={{
-                  background: isSelected
-                    ? "var(--pw-panel-2)"
-                    : "var(--pw-panel)",
-                  border: `1px solid ${isSelected ? "var(--pw-purple)" : "var(--pw-border)"}`,
-                  borderRadius: 8,
-                  color: "var(--pw-text)",
-                }}
-              >
-                <div style={{ fontSize: 14, fontWeight: 600 }}>
-                  {circuit.location}
-                </div>
-                <div
-                  className="pw-mono"
-                  style={{ fontSize: 11, color: "var(--pw-text-dim)" }}
-                >
-                  {circuit.country}
-                </div>
-              </button>
+      <div className="row g-3">
+        <div className="col-lg-4">
+          <div className="pw-card">
+            <div className="pw-card-title">Tracciati</div>
+            <div className="d-flex flex-column gap-1">
+              {CIRCUITS.map((circuit) => {
+                const isSelected = circuit.id === selectedCircuit.id;
+                return (
+                  <button
+                    key={circuit.id}
+                    type="button"
+                    onClick={() => setSelectedCircuitId(circuit.id)}
+                    className="btn text-start p-2"
+                    style={{
+                      background: isSelected
+                        ? "var(--pw-panel-2)"
+                        : "transparent",
+                      borderLeft: isSelected
+                        ? "3px solid var(--pw-purple)"
+                        : "3px solid transparent",
+                      borderRadius: 4,
+                      color: "var(--pw-text)",
+                    }}
+                  >
+                    <div style={{ fontSize: 14, fontWeight: 500 }}>
+                      {circuit.location}
+                    </div>
+                    <div
+                      className="pw-mono"
+                      style={{ fontSize: 11, color: "var(--pw-text-dim)" }}
+                    >
+                      {circuit.country}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
-          );
-        })}
-      </div>
+          </div>
+        </div>
 
-      <div className="pw-card">
-        <div className="row g-4">
-          <div className="col-lg-7">
+        <div className="col-lg-8">
+          <div className="pw-card" style={{ position: "sticky", top: "1rem" }}>
             <div className="fs-5 fw-semibold">{selectedCircuit.name}</div>
             <div
               className="pw-mono text-body-secondary mb-3"
@@ -69,7 +75,7 @@ export default function CircuitsPage() {
             </p>
 
             <div className="pw-metric-label mt-3">RECORD SUL GIRO</div>
-            <div className="d-flex align-items-baseline gap-2">
+            <div className="d-flex align-items-baseline gap-2 mb-4">
               <span className="pw-metric-value">
                 {selectedCircuit.lapRecordTime}
               </span>
@@ -78,11 +84,9 @@ export default function CircuitsPage() {
                 {selectedCircuit.lapRecordYear}
               </span>
             </div>
-          </div>
 
-          <div className="col-lg-5">
             <div className="row g-3">
-              <div className="col-6">
+              <div className="col-6 col-md-3">
                 <div
                   className="pw-card"
                   style={{ background: "var(--pw-panel-2)" }}
@@ -93,7 +97,7 @@ export default function CircuitsPage() {
                   </div>
                 </div>
               </div>
-              <div className="col-6">
+              <div className="col-6 col-md-3">
                 <div
                   className="pw-card"
                   style={{ background: "var(--pw-panel-2)" }}
@@ -102,7 +106,7 @@ export default function CircuitsPage() {
                   <div className="pw-metric-value">{selectedCircuit.laps}</div>
                 </div>
               </div>
-              <div className="col-6">
+              <div className="col-6 col-md-3">
                 <div
                   className="pw-card"
                   style={{ background: "var(--pw-panel-2)" }}
@@ -111,7 +115,7 @@ export default function CircuitsPage() {
                   <div className="pw-metric-value">{selectedCircuit.turns}</div>
                 </div>
               </div>
-              <div className="col-6">
+              <div className="col-6 col-md-3">
                 <div
                   className="pw-card"
                   style={{ background: "var(--pw-panel-2)" }}
