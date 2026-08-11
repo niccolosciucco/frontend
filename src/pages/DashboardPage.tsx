@@ -11,11 +11,7 @@ import {
 import { formatLapTime, formatGap } from "../utils/format";
 import { useRaceData } from "../context/useRaceData";
 
-const TOP_CHART_DRIVERS = ["VER", "NOR"];
-const CHART_COLORS: Record<string, string> = {
-  VER: "#9b5de5",
-  NOR: "#8a8d95",
-};
+const CHART_LINE_COLORS = ["#9b5de5", "#8a8d95"];
 
 function ChartTooltip({
   active,
@@ -37,6 +33,7 @@ function ChartTooltip({
 
 export default function DashboardPage() {
   const race = useRaceData();
+  const topTwoDrivers = race.drivers.slice(0, 2);
 
   return (
     <div>
@@ -130,12 +127,12 @@ export default function DashboardPage() {
                 />
                 <YAxis hide domain={["dataMin - 0.3", "dataMax + 0.3"]} />
                 <Tooltip content={<ChartTooltip />} />
-                {TOP_CHART_DRIVERS.map((code) => (
+                {topTwoDrivers.map((driver, index) => (
                   <Line
-                    key={code}
+                    key={driver.code}
                     type="monotone"
-                    dataKey={code}
-                    stroke={CHART_COLORS[code]}
+                    dataKey={driver.code}
+                    stroke={CHART_LINE_COLORS[index]}
                     strokeWidth={1.5}
                     dot={false}
                     isAnimationActive={false}
@@ -147,8 +144,8 @@ export default function DashboardPage() {
               className="d-flex gap-3 pw-mono"
               style={{ fontSize: 11, color: "var(--pw-text-dim)" }}
             >
-              {TOP_CHART_DRIVERS.map((code) => (
-                <span key={code}>
+              {topTwoDrivers.map((driver, index) => (
+                <span key={driver.code}>
                   <span
                     aria-hidden="true"
                     style={{
@@ -156,11 +153,11 @@ export default function DashboardPage() {
                       width: 8,
                       height: 8,
                       borderRadius: "50%",
-                      background: CHART_COLORS[code],
+                      background: CHART_LINE_COLORS[index],
                       marginRight: 4,
                     }}
                   />
-                  {code}
+                  {driver.code}
                 </span>
               ))}
             </div>
