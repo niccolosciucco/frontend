@@ -390,7 +390,9 @@ function tick(state: RaceState): RaceState {
 export function useLiveRaceData(intervalMs = 3000) {
   const [state, setState] = useState<RaceState>(() => {
     const currentLap = 1;
-    const drivers = INITIAL_DRIVERS;
+    const drivers = [...INITIAL_DRIVERS].sort(
+      (a, b) => a.position - b.position,
+    );
     return {
       trackName: "Gp Monza, Autodromo Nazionale",
       currentLap,

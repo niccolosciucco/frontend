@@ -8,10 +8,17 @@ import {
   ResponsiveContainer,
   type TooltipProps,
 } from "recharts";
+import { useNavigate } from "react-router-dom";
 import { formatLapTime, formatGap } from "../utils/format";
 import { useRaceData } from "../context/useRaceData";
 
-const CHART_LINE_COLORS = ["#9b5de5", "#8a8d95"];
+const CHART_LINE_COLORS = [
+  "#9b5de5",
+  "#2ed9a0",
+  "#f2c94c",
+  "#378ADD",
+  "#8a8d95",
+];
 
 function ChartTooltip({
   active,
@@ -33,7 +40,8 @@ function ChartTooltip({
 
 export default function DashboardPage() {
   const race = useRaceData();
-  const topTwoDrivers = race.drivers.slice(0, 2);
+  const navigate = useNavigate();
+  const topFiveDrivers = race.drivers.slice(0, 5);
 
   return (
     <div>
@@ -44,7 +52,7 @@ export default function DashboardPage() {
             Giro {race.currentLap} di {race.totalLaps}, asciutto
           </div>
         </div>
-        <div className="d-flex gap-2">
+        <div className="d-flex gap-2 align-items-center">
           {race.isFinished ? (
             <span
               className="pw-badge"
@@ -61,6 +69,13 @@ export default function DashboardPage() {
               <span className="pw-badge pw-badge-purple">Drs attivo</span>
             </>
           )}
+          <button
+            type="button"
+            className="btn btn-primary btn-sm"
+            onClick={() => navigate("/live")}
+          >
+            Guarda live →
+          </button>
         </div>
       </div>
 
@@ -113,7 +128,7 @@ export default function DashboardPage() {
 
           <div className="pw-card flex-grow-1">
             <div className="pw-card-title">Andamento tempi giro</div>
-            <ResponsiveContainer width="100%" height={140}>
+            <ResponsiveContainer width="100%" height={160}>
               <LineChart data={race.lapTimeHistory}>
                 <CartesianGrid
                   stroke="rgba(255,255,255,0.06)"
@@ -127,7 +142,7 @@ export default function DashboardPage() {
                 />
                 <YAxis hide domain={["dataMin - 0.3", "dataMax + 0.3"]} />
                 <Tooltip content={<ChartTooltip />} />
-                {topTwoDrivers.map((driver, index) => (
+                {topFiveDrivers.map((driver, index) => (
                   <Line
                     key={driver.code}
                     type="monotone"
@@ -141,10 +156,10 @@ export default function DashboardPage() {
               </LineChart>
             </ResponsiveContainer>
             <div
-              className="d-flex gap-3 pw-mono"
+              className="d-flex gap-3 pw-mono flex-wrap"
               style={{ fontSize: 11, color: "var(--pw-text-dim)" }}
             >
-              {topTwoDrivers.map((driver, index) => (
+              {topFiveDrivers.map((driver, index) => (
                 <span key={driver.code}>
                   <span
                     aria-hidden="true"
