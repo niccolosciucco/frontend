@@ -2,8 +2,6 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRaceData } from "../context/useRaceData";
 
-// Durata "teatrale" di un giro sullo schermo: un giro vero dura ~80s,
-// troppo lento da guardare dal vivo, quindi lo comprimiamo visivamente.
 const LOOP_DURATION_MS = 9000;
 const AVERAGE_LAP_SECONDS = 81;
 
@@ -22,7 +20,24 @@ const TEAM_COLORS: Record<string, string> = {
 };
 
 const TRACK_PATH_D =
-  "M100,340 C60,220 140,80 280,80 C420,80 460,180 400,240 C340,300 240,280 240,200 C240,120 340,100 420,140 C540,200 600,320 500,380 C400,440 160,420 100,340 Z";
+  "M 180,400 " +
+  "L 630,400 " +
+  "C 660,400 675,390 672,375 " +
+  "C 668,360 648,362 652,345 " +
+  "L 700,290 " +
+  "C 730,255 770,260 785,220 " +
+  "C 795,195 780,175 755,180 " +
+  "L 760,140 " +
+  "C 762,110 740,90 705,95 " +
+  "L 660,100 " +
+  "C 630,103 615,80 585,88 " +
+  "L 300,70 " +
+  "C 270,66 255,85 275,100 " +
+  "C 290,112 270,125 250,115 " +
+  "L 210,140 " +
+  "C 150,175 110,240 120,310 " +
+  "C 125,350 145,385 180,400 " +
+  "Z";
 
 export default function LiveTrackPage() {
   const race = useRaceData();
@@ -33,8 +48,6 @@ export default function LiveTrackPage() {
   const frameRef = useRef<number | undefined>(undefined);
   const driverCodesRef = useRef(race.drivers.map((d) => d.code));
 
-  // Il distacco di ciascun pilota, aggiornato ad ogni giro simulato,
-  // letto dall'animazione senza dover riavviare il ciclo di movimento.
   const offsetsRef = useRef<Record<string, number>>({});
   useEffect(() => {
     const map: Record<string, number> = {};
@@ -104,7 +117,7 @@ export default function LiveTrackPage() {
           <div className="pw-card">
             <svg
               width="100%"
-              viewBox="0 0 600 460"
+              viewBox="0 0 900 450"
               role="img"
               aria-label="Posizione delle vetture sul tracciato"
             >
@@ -124,6 +137,33 @@ export default function LiveTrackPage() {
                 strokeWidth={1}
                 strokeDasharray="6 8"
               />
+              <g
+                className="pw-mono"
+                style={{ fontSize: 11, fill: "var(--pw-text-dim)" }}
+                aria-hidden="true"
+              >
+                <text x="330" y="425">
+                  Rettilineo Box
+                </text>
+                <text x="640" y="425">
+                  Prima Variante
+                </text>
+                <text x="740" y="250">
+                  Curva Grande
+                </text>
+                <text x="700" y="80">
+                  Lesmo
+                </text>
+                <text x="420" y="55">
+                  Serraglio
+                </text>
+                <text x="190" y="80">
+                  Variante Ascari
+                </text>
+                <text x="60" y="250">
+                  Parabolica
+                </text>
+              </g>
               {race.drivers.map((driver) => (
                 <circle
                   key={driver.id}

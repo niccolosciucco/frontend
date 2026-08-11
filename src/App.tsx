@@ -14,6 +14,7 @@ import CircuitsAdminPage from "./pages/admin/CircuitsAdminPage";
 import EventsAdminPage from "./pages/admin/EventsAdminPage";
 import { RaceDataProvider } from "./context/RaceDataContext";
 import { AdminDataProvider } from "./context/AdminDataContext";
+import LiveTrackPage from "./pages/LiveTrackPage";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/strategia" element={<StrategyPage />} />
+            <Route path="/live" element={<LiveTrackPage />} />
             <Route path="/storico" element={<HistoryPage />} />
             <Route path="/circuiti" element={<CircuitsPage />} />
             <Route element={<ProtectedRoute requiredRole="ADMIN" />}>
