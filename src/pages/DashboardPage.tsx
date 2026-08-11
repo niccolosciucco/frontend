@@ -79,9 +79,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="row g-3 mb-3">
+      <div className="row g-3 mb-3 align-items-start">
         <div className="col-lg-8">
-          <div className="pw-card h-100">
+          <div className="pw-card">
             <div className="pw-card-title">Classifica in tempo reale</div>
             {race.drivers.map((driver) => (
               <div className="pw-standings-row" key={driver.id}>
@@ -126,7 +126,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="pw-card flex-grow-1">
+          <div className="pw-card">
             <div className="pw-card-title">Andamento tempi giro</div>
             <ResponsiveContainer width="100%" height={160}>
               <LineChart data={race.lapTimeHistory}>
