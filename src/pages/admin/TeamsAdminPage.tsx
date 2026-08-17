@@ -5,9 +5,10 @@ import {
   type AdminFormField,
 } from "../../components/admin/AdminCrudPage";
 import type { AdminTeam } from "../../types/admin";
+import { createTeam, updateTeam, deleteTeam } from "../../api/adminApi";
 
 export default function TeamsAdminPage() {
-  const { teams, setTeams } = useAdminData();
+  const { teams, setTeams, teamsLoading } = useAdminData();
 
   const columns: AdminColumn<AdminTeam>[] = [
     {
@@ -80,13 +81,21 @@ export default function TeamsAdminPage() {
       columns={columns}
       fields={fields}
       items={teams}
-      onCreate={(item) =>
-        setTeams((prev) => [...prev, { ...item, id: crypto.randomUUID() }])
-      }
-      onUpdate={(item) =>
-        setTeams((prev) => prev.map((t) => (t.id === item.id ? item : t)))
-      }
-      onDelete={(id) => setTeams((prev) => prev.filter((t) => t.id !== id))}
+      isLoading={teamsLoading}
+      onCreate={async (item) => {
+        const created = await createTeam(item);
+        setTeams((prev) => [...prev, created]);
+      }}
+      onUpdate={async (item) => {
+        const updated = await updateTeam(item.id, item);
+        setTeams((prev) =>
+          prev.map((t) => (t.id === updated.id ? updated : t)),
+        );
+      }}
+      onDelete={async (id) => {
+        await deleteTeam(id);
+        setTeams((prev) => prev.filter((t) => t.id !== id));
+      }}
       emptyItem={() => ({
         id: "",
         name: "",
