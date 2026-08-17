@@ -1,5 +1,6 @@
 import {
   createContext,
+  useEffect,
   useState,
   type ReactNode,
   type Dispatch,
@@ -11,12 +12,8 @@ import type {
   AdminCircuit,
   AdminEvent,
 } from "../types/admin";
-import {
-  SEED_TEAMS,
-  SEED_DRIVERS,
-  SEED_CIRCUITS,
-  SEED_EVENTS,
-} from "../data/adminSeed";
+import { SEED_CIRCUITS, SEED_EVENTS } from "../data/adminSeed";
+import { fetchTeams, fetchPiloti } from "../api/adminApi";
 
 export interface AdminDataContextValue {
   teams: AdminTeam[];
@@ -27,6 +24,8 @@ export interface AdminDataContextValue {
   setCircuits: Dispatch<SetStateAction<AdminCircuit[]>>;
   events: AdminEvent[];
   setEvents: Dispatch<SetStateAction<AdminEvent[]>>;
+  teamsLoading: boolean;
+  driversLoading: boolean;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -35,10 +34,24 @@ export const AdminDataContext = createContext<
 >(undefined);
 
 export function AdminDataProvider({ children }: { children: ReactNode }) {
-  const [teams, setTeams] = useState<AdminTeam[]>(SEED_TEAMS);
-  const [drivers, setDrivers] = useState<AdminDriver[]>(SEED_DRIVERS);
+  const [teams, setTeams] = useState<AdminTeam[]>([]);
+  const [drivers, setDrivers] = useState<AdminDriver[]>([]);
   const [circuits, setCircuits] = useState<AdminCircuit[]>(SEED_CIRCUITS);
   const [events, setEvents] = useState<AdminEvent[]>(SEED_EVENTS);
+  const [teamsLoading, setTeamsLoading] = useState(true);
+  const [driversLoading, setDriversLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTeams()
+      .then(setTeams)
+      .finally(() => setTeamsLoading(false));
+  }, []);
+
+  useEffect(() => {
+    fetchPiloti()
+      .then(setDrivers)
+      .finally(() => setDriversLoading(false));
+  }, []);
 
   const value: AdminDataContextValue = {
     teams,
@@ -49,6 +62,8 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     setCircuits,
     events,
     setEvents,
+    teamsLoading,
+    driversLoading,
   };
 
   return (
