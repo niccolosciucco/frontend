@@ -56,7 +56,9 @@ export async function createTeam(team: AdminTeam): Promise<AdminTeam> {
     );
     return teamFromDto(data);
   } catch (error) {
-    throw new Error(extractErrorMessage(error, "Impossibile creare il team."));
+    throw new Error(extractErrorMessage(error, "Impossibile creare il team."), {
+      cause: error,
+    });
   }
 }
 
@@ -73,6 +75,7 @@ export async function updateTeam(
   } catch (error) {
     throw new Error(
       extractErrorMessage(error, "Impossibile aggiornare il team."),
+      { cause: error },
     );
   }
 }
@@ -83,6 +86,7 @@ export async function deleteTeam(id: string): Promise<void> {
   } catch (error) {
     throw new Error(
       extractErrorMessage(error, "Impossibile eliminare il team."),
+      { cause: error },
     );
   }
 }
@@ -132,6 +136,7 @@ export async function createPilota(pilota: AdminDriver): Promise<AdminDriver> {
   } catch (error) {
     throw new Error(
       extractErrorMessage(error, "Impossibile creare il pilota."),
+      { cause: error },
     );
   }
 }
@@ -149,6 +154,7 @@ export async function updatePilota(
   } catch (error) {
     throw new Error(
       extractErrorMessage(error, "Impossibile aggiornare il pilota."),
+      { cause: error },
     );
   }
 }
@@ -159,6 +165,7 @@ export async function deletePilota(id: string): Promise<void> {
   } catch (error) {
     throw new Error(
       extractErrorMessage(error, "Impossibile eliminare il pilota."),
+      { cause: error },
     );
   }
 }
