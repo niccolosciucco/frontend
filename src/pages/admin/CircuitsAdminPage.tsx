@@ -65,13 +65,15 @@ export default function CircuitsAdminPage() {
       columns={columns}
       fields={fields}
       items={circuits}
-      onCreate={(item) =>
-        setCircuits((prev) => [...prev, { ...item, id: crypto.randomUUID() }])
+      onCreate={async (item) =>
+        setEvents((prev) => [...prev, { ...item, id: crypto.randomUUID() }])
       }
-      onUpdate={(item) =>
-        setCircuits((prev) => prev.map((c) => (c.id === item.id ? item : c)))
+      onUpdate={async (item) =>
+        setEvents((prev) => prev.map((e) => (e.id === item.id ? item : e)))
       }
-      onDelete={(id) => setCircuits((prev) => prev.filter((c) => c.id !== id))}
+      onDelete={async (id) =>
+        setEvents((prev) => prev.filter((e) => e.id !== id))
+      }
       emptyItem={() => ({
         id: "",
         name: "",
