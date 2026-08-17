@@ -22,6 +22,12 @@ export interface AdminCircuit {
   country: string;
   lengthKm: string;
   laps: string;
+  turns: string;
+  drsZones: string;
+  lapRecordTime: string;
+  lapRecordDriver: string;
+  lapRecordYear: string;
+  description: string;
 }
 
 export interface AdminEvent {
