@@ -5,9 +5,10 @@ import {
   type AdminFormField,
 } from "../../components/admin/AdminCrudPage";
 import type { AdminDriver } from "../../types/admin";
+import { createPilota, updatePilota, deletePilota } from "../../api/adminApi";
 
 export default function DriversAdminPage() {
-  const { drivers, setDrivers, teams } = useAdminData();
+  const { drivers, setDrivers, driversLoading, teams } = useAdminData();
   const teamName = (teamId: string) =>
     teams.find((t) => t.id === teamId)?.name ?? "—";
 
@@ -63,13 +64,21 @@ export default function DriversAdminPage() {
       columns={columns}
       fields={fields}
       items={drivers}
-      onCreate={(item) =>
-        setDrivers((prev) => [...prev, { ...item, id: crypto.randomUUID() }])
-      }
-      onUpdate={(item) =>
-        setDrivers((prev) => prev.map((d) => (d.id === item.id ? item : d)))
-      }
-      onDelete={(id) => setDrivers((prev) => prev.filter((d) => d.id !== id))}
+      isLoading={driversLoading}
+      onCreate={async (item) => {
+        const created = await createPilota(item);
+        setDrivers((prev) => [...prev, created]);
+      }}
+      onUpdate={async (item) => {
+        const updated = await updatePilota(item.id, item);
+        setDrivers((prev) =>
+          prev.map((d) => (d.id === updated.id ? updated : d)),
+        );
+      }}
+      onDelete={async (id) => {
+        await deletePilota(id);
+        setDrivers((prev) => prev.filter((d) => d.id !== id));
+      }}
       emptyItem={() => ({
         id: "",
         name: "",
