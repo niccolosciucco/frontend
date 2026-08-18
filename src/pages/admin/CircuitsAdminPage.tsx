@@ -5,9 +5,14 @@ import {
   type AdminFormField,
 } from "../../components/admin/AdminCrudPage";
 import type { AdminCircuit } from "../../types/admin";
+import {
+  createCircuito,
+  updateCircuito,
+  deleteCircuito,
+} from "../../api/adminApi";
 
 export default function CircuitsAdminPage() {
-  const { circuits, setCircuits } = useAdminData();
+  const { circuits, setCircuits, circuitsLoading } = useAdminData();
 
   const columns: AdminColumn<AdminCircuit>[] = [
     {
@@ -42,6 +47,16 @@ export default function CircuitsAdminPage() {
         </span>
       ),
     },
+    {
+      key: "turns",
+      label: "Curve",
+      width: "50px",
+      render: (c) => (
+        <span className="pw-mono" style={{ fontSize: 13 }}>
+          {c.turns}
+        </span>
+      ),
+    },
   ];
 
   const fields: AdminFormField<AdminCircuit>[] = [
@@ -55,6 +70,16 @@ export default function CircuitsAdminPage() {
       required: true,
     },
     { name: "laps", label: "Giri gara", type: "number", required: true },
+    { name: "turns", label: "Numero curve", type: "number", required: true },
+    { name: "drsZones", label: "Zone DRS", type: "number", required: true },
+    {
+      name: "lapRecordTime",
+      label: "Record sul giro (es. 1:21.046)",
+      type: "text",
+    },
+    { name: "lapRecordDriver", label: "Pilota del record", type: "text" },
+    { name: "lapRecordYear", label: "Anno del record", type: "number" },
+    { name: "description", label: "Descrizione", type: "text" },
   ];
 
   return (
@@ -65,15 +90,21 @@ export default function CircuitsAdminPage() {
       columns={columns}
       fields={fields}
       items={circuits}
-      onCreate={async (item) =>
-        setEvents((prev) => [...prev, { ...item, id: crypto.randomUUID() }])
-      }
-      onUpdate={async (item) =>
-        setEvents((prev) => prev.map((e) => (e.id === item.id ? item : e)))
-      }
-      onDelete={async (id) =>
-        setEvents((prev) => prev.filter((e) => e.id !== id))
-      }
+      isLoading={circuitsLoading}
+      onCreate={async (item) => {
+        const created = await createCircuito(item);
+        setCircuits((prev) => [...prev, created]);
+      }}
+      onUpdate={async (item) => {
+        const updated = await updateCircuito(item.id, item);
+        setCircuits((prev) =>
+          prev.map((c) => (c.id === updated.id ? updated : c)),
+        );
+      }}
+      onDelete={async (id) => {
+        await deleteCircuito(id);
+        setCircuits((prev) => prev.filter((c) => c.id !== id));
+      }}
       emptyItem={() => ({
         id: "",
         name: "",
@@ -81,6 +112,12 @@ export default function CircuitsAdminPage() {
         country: "",
         lengthKm: "",
         laps: "",
+        turns: "",
+        drsZones: "",
+        lapRecordTime: "",
+        lapRecordDriver: "",
+        lapRecordYear: "",
+        description: "",
       })}
       searchPredicate={(item, query) => item.name.toLowerCase().includes(query)}
       itemLabel={(item) => item.name}
