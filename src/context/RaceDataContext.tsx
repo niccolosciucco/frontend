@@ -9,6 +9,7 @@ import { Client } from "@stomp/stompjs";
 import { axiosClient } from "../api/axiosClient";
 import type { RaceState } from "../types/race";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const RaceDataContext = createContext<RaceState | undefined>(undefined);
 
 export function RaceDataProvider({ children }: { children: ReactNode }) {
