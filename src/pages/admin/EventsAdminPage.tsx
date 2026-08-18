@@ -5,9 +5,10 @@ import {
   type AdminFormField,
 } from "../../components/admin/AdminCrudPage";
 import type { AdminEvent } from "../../types/admin";
+import { createEvento, updateEvento, deleteEvento } from "../../api/adminApi";
 
 export default function EventsAdminPage() {
-  const { events, setEvents, circuits } = useAdminData();
+  const { events, setEvents, eventsLoading, circuits } = useAdminData();
   const circuitName = (circuitId: string) =>
     circuits.find((c) => c.id === circuitId)?.name ?? "—";
 
@@ -76,13 +77,21 @@ export default function EventsAdminPage() {
       columns={columns}
       fields={fields}
       items={events}
-      onCreate={(item) =>
-        setEvents((prev) => [...prev, { ...item, id: crypto.randomUUID() }])
-      }
-      onUpdate={(item) =>
-        setEvents((prev) => prev.map((e) => (e.id === item.id ? item : e)))
-      }
-      onDelete={(id) => setEvents((prev) => prev.filter((e) => e.id !== id))}
+      isLoading={eventsLoading}
+      onCreate={async (item) => {
+        const created = await createEvento(item);
+        setEvents((prev) => [...prev, created]);
+      }}
+      onUpdate={async (item) => {
+        const updated = await updateEvento(item.id, item);
+        setEvents((prev) =>
+          prev.map((e) => (e.id === updated.id ? updated : e)),
+        );
+      }}
+      onDelete={async (id) => {
+        await deleteEvento(id);
+        setEvents((prev) => prev.filter((e) => e.id !== id));
+      }}
       emptyItem={() => ({
         id: "",
         name: "",
