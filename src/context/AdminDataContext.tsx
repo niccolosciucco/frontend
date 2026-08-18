@@ -12,8 +12,12 @@ import type {
   AdminCircuit,
   AdminEvent,
 } from "../types/admin";
-import { SEED_CIRCUITS, SEED_EVENTS } from "../data/adminSeed";
-import { fetchTeams, fetchPiloti } from "../api/adminApi";
+import {
+  fetchTeams,
+  fetchPiloti,
+  fetchCircuiti,
+  fetchEventi,
+} from "../api/adminApi";
 
 export interface AdminDataContextValue {
   teams: AdminTeam[];
@@ -26,6 +30,8 @@ export interface AdminDataContextValue {
   setEvents: Dispatch<SetStateAction<AdminEvent[]>>;
   teamsLoading: boolean;
   driversLoading: boolean;
+  circuitsLoading: boolean;
+  eventsLoading: boolean;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -36,10 +42,12 @@ export const AdminDataContext = createContext<
 export function AdminDataProvider({ children }: { children: ReactNode }) {
   const [teams, setTeams] = useState<AdminTeam[]>([]);
   const [drivers, setDrivers] = useState<AdminDriver[]>([]);
-  const [circuits, setCircuits] = useState<AdminCircuit[]>(SEED_CIRCUITS);
-  const [events, setEvents] = useState<AdminEvent[]>(SEED_EVENTS);
+  const [circuits, setCircuits] = useState<AdminCircuit[]>([]);
+  const [events, setEvents] = useState<AdminEvent[]>([]);
   const [teamsLoading, setTeamsLoading] = useState(true);
   const [driversLoading, setDriversLoading] = useState(true);
+  const [circuitsLoading, setCircuitsLoading] = useState(true);
+  const [eventsLoading, setEventsLoading] = useState(true);
 
   useEffect(() => {
     fetchTeams()
@@ -53,6 +61,18 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
       .finally(() => setDriversLoading(false));
   }, []);
 
+  useEffect(() => {
+    fetchCircuiti()
+      .then(setCircuits)
+      .finally(() => setCircuitsLoading(false));
+  }, []);
+
+  useEffect(() => {
+    fetchEventi()
+      .then(setEvents)
+      .finally(() => setEventsLoading(false));
+  }, []);
+
   const value: AdminDataContextValue = {
     teams,
     setTeams,
@@ -64,6 +84,8 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     setEvents,
     teamsLoading,
     driversLoading,
+    circuitsLoading,
+    eventsLoading,
   };
 
   return (
