@@ -1,5 +1,10 @@
 import { axiosClient } from "./axiosClient";
-import type { AdminTeam, AdminDriver } from "../types/admin";
+import type {
+  AdminTeam,
+  AdminDriver,
+  AdminCircuit,
+  AdminEvent,
+} from "../types/admin";
 
 function extractErrorMessage(error: unknown, fallback: string): string {
   if (
@@ -165,6 +170,188 @@ export async function deletePilota(id: string): Promise<void> {
   } catch (error) {
     throw new Error(
       extractErrorMessage(error, "Impossibile eliminare il pilota."),
+      { cause: error },
+    );
+  }
+}
+
+// --- Circuito ---
+
+interface CircuitoResponseDto {
+  id: string;
+  name: string;
+  location: string;
+  country: string;
+  lengthKm: number;
+  laps: number;
+  turns: number;
+  drsZones: number;
+  lapRecordTime: string | null;
+  lapRecordDriver: string | null;
+  lapRecordYear: number | null;
+  description: string | null;
+}
+
+function circuitoFromDto(dto: CircuitoResponseDto): AdminCircuit {
+  return {
+    id: dto.id,
+    name: dto.name,
+    location: dto.location,
+    country: dto.country,
+    lengthKm: String(dto.lengthKm),
+    laps: String(dto.laps),
+    turns: String(dto.turns),
+    drsZones: String(dto.drsZones),
+    lapRecordTime: dto.lapRecordTime ?? "",
+    lapRecordDriver: dto.lapRecordDriver ?? "",
+    lapRecordYear: dto.lapRecordYear ? String(dto.lapRecordYear) : "",
+    description: dto.description ?? "",
+  };
+}
+
+function circuitoToRequest(circuito: AdminCircuit) {
+  return {
+    name: circuito.name,
+    location: circuito.location,
+    country: circuito.country,
+    lengthKm: Number(circuito.lengthKm),
+    laps: Number(circuito.laps),
+    turns: Number(circuito.turns),
+    drsZones: Number(circuito.drsZones),
+    lapRecordTime: circuito.lapRecordTime || null,
+    lapRecordDriver: circuito.lapRecordDriver || null,
+    lapRecordYear: circuito.lapRecordYear
+      ? Number(circuito.lapRecordYear)
+      : null,
+    description: circuito.description || null,
+  };
+}
+
+export async function fetchCircuiti(): Promise<AdminCircuit[]> {
+  const { data } = await axiosClient.get<CircuitoResponseDto[]>("/circuiti");
+  return data.map(circuitoFromDto);
+}
+
+export async function createCircuito(
+  circuito: AdminCircuit,
+): Promise<AdminCircuit> {
+  try {
+    const { data } = await axiosClient.post<CircuitoResponseDto>(
+      "/circuiti",
+      circuitoToRequest(circuito),
+    );
+    return circuitoFromDto(data);
+  } catch (error) {
+    throw new Error(
+      extractErrorMessage(error, "Impossibile creare il circuito."),
+      { cause: error },
+    );
+  }
+}
+
+export async function updateCircuito(
+  id: string,
+  circuito: AdminCircuit,
+): Promise<AdminCircuit> {
+  try {
+    const { data } = await axiosClient.put<CircuitoResponseDto>(
+      `/circuiti/${id}`,
+      circuitoToRequest(circuito),
+    );
+    return circuitoFromDto(data);
+  } catch (error) {
+    throw new Error(
+      extractErrorMessage(error, "Impossibile aggiornare il circuito."),
+      { cause: error },
+    );
+  }
+}
+
+export async function deleteCircuito(id: string): Promise<void> {
+  try {
+    await axiosClient.delete(`/circuiti/${id}`);
+  } catch (error) {
+    throw new Error(
+      extractErrorMessage(error, "Impossibile eliminare il circuito."),
+      { cause: error },
+    );
+  }
+}
+
+// --- Evento ---
+
+interface EventoResponseDto {
+  id: string;
+  name: string;
+  circuitoId: string;
+  circuitoName: string;
+  date: string;
+  status: "PROGRAMMATO" | "CONCLUSO";
+}
+
+function eventoFromDto(dto: EventoResponseDto): AdminEvent {
+  return {
+    id: dto.id,
+    name: dto.name,
+    circuitId: dto.circuitoId,
+    date: dto.date,
+    status: dto.status === "PROGRAMMATO" ? "programmato" : "concluso",
+  };
+}
+
+function eventoToRequest(evento: AdminEvent) {
+  return {
+    name: evento.name,
+    circuitoId: evento.circuitId,
+    date: evento.date,
+    status: evento.status === "programmato" ? "PROGRAMMATO" : "CONCLUSO",
+  };
+}
+
+export async function fetchEventi(): Promise<AdminEvent[]> {
+  const { data } = await axiosClient.get<EventoResponseDto[]>("/eventi");
+  return data.map(eventoFromDto);
+}
+
+export async function createEvento(evento: AdminEvent): Promise<AdminEvent> {
+  try {
+    const { data } = await axiosClient.post<EventoResponseDto>(
+      "/eventi",
+      eventoToRequest(evento),
+    );
+    return eventoFromDto(data);
+  } catch (error) {
+    throw new Error(
+      extractErrorMessage(error, "Impossibile creare l'evento."),
+      { cause: error },
+    );
+  }
+}
+
+export async function updateEvento(
+  id: string,
+  evento: AdminEvent,
+): Promise<AdminEvent> {
+  try {
+    const { data } = await axiosClient.put<EventoResponseDto>(
+      `/eventi/${id}`,
+      eventoToRequest(evento),
+    );
+    return eventoFromDto(data);
+  } catch (error) {
+    throw new Error(
+      extractErrorMessage(error, "Impossibile aggiornare l'evento."),
+      { cause: error },
+    );
+  }
+}
+
+export async function deleteEvento(id: string): Promise<void> {
+  try {
+    await axiosClient.delete(`/eventi/${id}`);
+  } catch (error) {
+    throw new Error(
+      extractErrorMessage(error, "Impossibile eliminare l'evento."),
       { cause: error },
     );
   }
