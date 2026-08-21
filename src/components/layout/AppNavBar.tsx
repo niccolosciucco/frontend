@@ -27,6 +27,9 @@ export function AppNavBar() {
             <Nav.Link as={NavLink} to="/storico">
               Storico
             </Nav.Link>
+            <Nav.Link as={NavLink} to="/classifica">
+              Classifica
+            </Nav.Link>
             <Nav.Link as={NavLink} to="/circuiti">
               Circuiti
             </Nav.Link>
