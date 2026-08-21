@@ -91,6 +91,17 @@ export default function DashboardPage() {
                   <div className="pw-driver-name">{driver.name}</div>
                   <div className="pw-driver-team">{driver.team}</div>
                 </div>
+                {driver.pittedThisLap && (
+                  <span
+                    className="pw-badge"
+                    style={{
+                      background: "rgba(242,201,76,0.15)",
+                      color: "var(--pw-yellow)",
+                    }}
+                  >
+                    IN BOX
+                  </span>
+                )}
                 <span
                   className={`pw-tire-dot ${driver.tireCompound}`}
                   aria-hidden="true"
@@ -194,6 +205,9 @@ export default function DashboardPage() {
                   style={{ fontSize: 13 }}
                 >
                   {driver.code}
+                </div>
+                <div className="pw-metric-label" style={{ marginBottom: 8 }}>
+                  Soste: {driver.pitStopCount}
                 </div>
 
                 <div className="pw-metric-label" style={{ marginBottom: 2 }}>
