@@ -12,6 +12,8 @@ export interface DriverState {
   tireWearPercent: number;
   fuelPercent: number;
   ersPercent: number;
+  pittedThisLap: boolean;
+  pitStopCount: number;
 }
 
 export interface LapTimeSample {
