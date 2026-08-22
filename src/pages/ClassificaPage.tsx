@@ -4,6 +4,7 @@ import {
   fetchClassificaCostruttori,
 } from "../api/classificaApi";
 import type { PilotaStanding, TeamStanding } from "../types/classifica";
+import { Link } from "react-router-dom";
 
 export default function ClassificaPage() {
   const [piloti, setPiloti] = useState<PilotaStanding[]>([]);
@@ -41,7 +42,13 @@ export default function ClassificaPage() {
                 <div className="pw-standings-row" key={p.pilotaId}>
                   <div className="pw-position">{index + 1}</div>
                   <div className="flex-grow-1" style={{ minWidth: 0 }}>
-                    <div className="pw-driver-name">{p.pilotaName}</div>
+                    <Link
+                      to={`/piloti/${p.pilotaId}`}
+                      className="pw-driver-name text-decoration-none"
+                      style={{ color: "var(--pw-text)" }}
+                    >
+                      {p.pilotaName}
+                    </Link>
                     <div className="pw-driver-team">{p.teamName}</div>
                   </div>
                   <div className="pw-mono fw-semibold" style={{ fontSize: 14 }}>
