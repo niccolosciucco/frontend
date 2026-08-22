@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchPilotaStats } from "../api/pilotaStatsApi";
 import type { PilotaStats } from "../types/pilotaStats";
+import { DriverPhoto } from "../components/DriverPhoto";
 
 export default function DriverProfilePage() {
   const { pilotaId } = useParams<{ pilotaId: string }>();
@@ -54,12 +55,7 @@ export default function DriverProfilePage() {
       </button>
 
       <div className="d-flex align-items-center gap-3 mb-4">
-        <div
-          className="pw-avatar"
-          style={{ width: 56, height: 56, fontSize: 18 }}
-        >
-          {stats.number}
-        </div>
+        <DriverPhoto name={stats.pilotaName} number={stats.number} size={56} />
         <div>
           <div className="fs-4 fw-semibold">{stats.pilotaName}</div>
           <div className="pw-mono text-body-secondary" style={{ fontSize: 13 }}>
