@@ -6,6 +6,7 @@ import {
 } from "../../components/admin/AdminCrudPage";
 import type { AdminDriver } from "../../types/admin";
 import { createPilota, updatePilota, deletePilota } from "../../api/adminApi";
+import { Link } from "react-router-dom";
 
 export default function DriversAdminPage() {
   const { drivers, setDrivers, driversLoading, teams } = useAdminData();
@@ -20,7 +21,14 @@ export default function DriversAdminPage() {
         <div className="d-flex align-items-center gap-2">
           <div className="pw-avatar">{d.number}</div>
           <div>
-            <div className="pw-driver-name">{d.name}</div>
+            <Link
+              to={`/piloti/${d.id}`}
+              className="pw-driver-name text-decoration-none"
+              style={{ color: "var(--pw-text)" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {d.name}
+            </Link>
             <div className="pw-driver-team">{teamName(d.teamId)}</div>
           </div>
         </div>
