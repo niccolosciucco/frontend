@@ -172,8 +172,10 @@ export default function LiveTrackPage() {
                   }}
                   r={7}
                   fill={TEAM_COLORS[driver.team] ?? "var(--pw-text-dim)"}
-                  stroke="var(--pw-bg)"
-                  strokeWidth={1.5}
+                  stroke={
+                    driver.pittedThisLap ? "var(--pw-yellow)" : "var(--pw-bg)"
+                  }
+                  strokeWidth={driver.pittedThisLap ? 3 : 1.5}
                 />
               ))}
             </svg>
