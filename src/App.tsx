@@ -16,6 +16,7 @@ import { RaceDataProvider } from "./context/RaceDataContext";
 import { AdminDataProvider } from "./context/AdminDataContext";
 import LiveTrackPage from "./pages/LiveTrackPage";
 import ClassificaPage from "./pages/ClassificaPage";
+import DriverProfilePage from "./pages/DriverProfilePage";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path="/live" element={<LiveTrackPage />} />
             <Route path="/storico" element={<HistoryPage />} />
             <Route path="/classifica" element={<ClassificaPage />} />
+            <Route path="/piloti/:pilotaId" element={<DriverProfilePage />} />
             <Route path="/circuiti" element={<CircuitsPage />} />
             <Route element={<ProtectedRoute requiredRole="ADMIN" />}>
               <Route
